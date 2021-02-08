@@ -14,7 +14,7 @@ class CreateVwReportAllTable extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE ALGORITHM = UNDEFINED DEFINER = `dbd_performant_admin`@`localhost` SQL SECURITY DEFINER VIEW `laravel_performant`.`vw_report_all` AS SELECT
+        DB::statement("CREATE OR REPLACE ALGORITHM = UNDEFINED DEFINER = 'dbd_performant_admin'@'localhost' SQL SECURITY DEFINER VIEW 'laravel_performant'.'vw_report_all' AS SELECT
                             Count( orders.created_at ) AS orders
                         FROM
                             orders
