@@ -1,5 +1,5 @@
 
-    <div class="container-fluid">
+    <div wire:ignore.self class="container-fluid">
         <div class="d-flex justify-content-center jumbotron">
             <h1><a href="">2020 Sales Report</a></h1>
         </div>
@@ -7,8 +7,8 @@
         <form wire:submit.prevent="filter">
             <div class="row">
                 <div class="col-sm-2 form-group">
-                    <label for="idProduct">Select Product (select one):</label>
-                    <select class="form-control" id="idProduct" wire:model.defer="product">
+                    <label>Select Product (select one):</label>
+                    <select class="form-control" wire:model.defer="product">
                         <option value="">--Select--</option>
                         <option value="1">Air Conditioner</option>
                         <option value="2">Biscuits</option>
@@ -33,9 +33,9 @@
                     </select>
                 </div>
                 <div class="col-sm-2 form-group">
-                    <label for="idCountry">Select Country (select one):</label>
-                    <select class="form-control" id="idCountry" wire:model="country">
-                        <option>--Select--</option>
+                    <label>Select Country (select one):</label>
+                    <select class="form-control" wire:model.defer="country">
+                        <option value="">--Select--</option>
                         <option value="Argentina">Argentina</option>
                         <option value="Australia">Australia</option>
                         <option value="Brazil">Brazil</option>
@@ -60,9 +60,9 @@
                 </div>
                 <div class="form-row col-sm-3">
                     <div class="col-6">
-                        <label for="idAgeFirst">Choose Between Ages:</label>
-                        <select class="form-control" id="idAgeFirst" wire:model="ageFirst">
-                            <option>--Select--</option>
+                        <label>Choose Between Ages:</label>
+                        <select class="form-control @error('ageFirst') mb-4 is-invalid state-invalid @enderror" wire:model.defer="ageFirst">
+                            <option value="">--Select--</option>
                             <option value="17">17</option>
                             <option value="18">18</option>
                             <option value="19">19</option>
@@ -118,11 +118,14 @@
                             <option value="69">69</option>
                             <option value="70">70</option>
                         </select>
+                        @error('ageFirst')
+                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-6">
-                        <label for="idAgeSecond"><span style="visibility:hidden;">Choose Between Ages:</span></label>
-                        <select class="form-control" id="idAgeSecond" wire:model="ageSecond">
-                            <option>--Select--</option>
+                        <label><span style="visibility:hidden;">Choose Between Ages:</span></label>
+                        <select class="form-control @error('ageSecond') mb-4 is-invalid state-invalid @enderror" wire:model.defer="ageSecond">
+                            <option value="">--Select--</option>
                             <option value="17">17</option>
                             <option value="18">18</option>
                             <option value="19">19</option>
@@ -178,19 +181,28 @@
                             <option value="69">69</option>
                             <option value="70">70</option>
                         </select>
+                        @error('ageSecond')
+                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
-                <div class="form-row col-sm-4">
+                <div class="form-row col-sm-3">
                     <div class="col-6">
-                        <label for="idDateFirst">Choose Between Date:</label>
-                        <input class="form-control" type="date" value="2020-01-01" id="idDateFirst" wire:model="dateFirst">
+                        <label>Choose Between Date:</label>
+                        <input class="form-control @error('dateFirst') mb-4 is-invalid state-invalid @enderror" type="date" value="2020-01-01" wire:model.defer="dateFirst">
+                        @error('dateFirst')
+                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-6">
-                        <label for="idDateSecond"><span style="visibility:hidden;">Choose Between Date:</span></label>
-                        <input class="form-control" type="date" value="2020-12-31" id="idDateSecond" wire:model="dateSecond">
+                        <label><span style="visibility:hidden;">Choose Between Date:</span></label>
+                        <input class="form-control @error('dateSecond') mb-4 is-invalid state-invalid @enderror" type="date" value="2020-12-31" wire:model.defer="dateSecond">
+                        @error('dateSecond')
+                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
-                <div class="col-sm-1">
+                <div class="col-sm-2">
                     <label><span style="visibility:hidden;">Choose Between</span></label>
                     <button type="submit" class="btn btn-primary">Filter Report</button>
                 </div>

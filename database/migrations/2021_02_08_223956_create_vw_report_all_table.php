@@ -15,13 +15,13 @@ class CreateVwReportAllTable extends Migration
     public function up()
     {
         DB::statement("CREATE VIEW `dbd_performant`.`vw_report_all` AS SELECT
-        Count( orders.created_at ) AS orders
-    FROM
-        orders
-    GROUP BY
-        MONTHNAME( orders.created_at )
-    ORDER BY
-        orders.created_at ASC;");
+                            Count( orders.created_at ) AS orders
+                        FROM
+                            orders
+                        GROUP BY
+                            MONTHNAME( orders.created_at )
+                        ORDER BY
+                            orders.created_at ASC;");
     }
 
     /**

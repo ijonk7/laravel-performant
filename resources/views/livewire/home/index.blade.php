@@ -9,9 +9,33 @@
 
     @section('js')
         <script>
+            Livewire.onLoad(() => {
+                let ctx = document.getElementById('myChart').getContext('2d');
+                let chart = new Chart(ctx, {
+                    // The type of chart we want to create
+                    type: 'line',
+
+                    // The data for our dataset
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+                            'October', 'November', 'December'
+                        ],
+                        datasets: [{
+                            label: 'Sales',
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            data: @json($allReport)
+                        }]
+                    },
+
+                    // Configuration options go here
+                    options: {}
+                });
+            })
+
             Livewire.on('filterReport', filterProduct => {
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var chart = new Chart(ctx, {
+                let ctx = document.getElementById('myChart').getContext('2d');
+                let chart = new Chart(ctx, {
                     // The type of chart we want to create
                     type: 'line',
 
@@ -32,9 +56,10 @@
                     options: {}
                 });
             })
+
             Livewire.on('filterAllReport', () => {
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var chart = new Chart(ctx, {
+                let ctx = document.getElementById('myChart').getContext('2d');
+                let chart = new Chart(ctx, {
                     // The type of chart we want to create
                     type: 'line',
 
@@ -47,7 +72,7 @@
                             label: 'Sales',
                             backgroundColor: 'rgb(255, 99, 132)',
                             borderColor: 'rgb(255, 99, 132)',
-                            data: Object.values(@json($allReport))
+                            data: @json($allReport)
                         }]
                     },
 
@@ -55,28 +80,6 @@
                     options: {}
                 });
             })
-
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var chart = new Chart(ctx, {
-                // The type of chart we want to create
-                type: 'line',
-
-                // The data for our dataset
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-                        'October', 'November', 'December'
-                    ],
-                    datasets: [{
-                        label: 'Sales',
-                        backgroundColor: 'rgb(255, 99, 132)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        data: Object.values(@json($allReport))
-                    }]
-                },
-
-                // Configuration options go here
-                options: {}
-            });
         </script>
     @endsection
 </div>
