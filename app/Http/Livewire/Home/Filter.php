@@ -28,10 +28,10 @@ class Filter extends Component
 
         if ($this->product || $this->country || $this->ageFirst || $this->ageSecond || $this->dateFirst || $this->dateSecond) {
             $this->validate([
-                'ageFirst' => 'nullable|required_with:ageSecond|numeric|lt:ageSecond',
-                'ageSecond' => 'nullable|required_with:ageFirst|numeric|gt:ageFirst',
-                'dateFirst' => 'nullable|required_with:dateSecond|date|before:dateSecond',
-                'dateSecond' => 'nullable|required_with:dateFirst|date|after:dateFirst'
+                'ageFirst' => 'nullable|required_with:ageSecond|numeric|lte:ageSecond',
+                'ageSecond' => 'nullable|required_with:ageFirst|numeric|gte:ageFirst',
+                'dateFirst' => 'nullable|required_with:dateSecond|date|before_or_equal:dateSecond',
+                'dateSecond' => 'nullable|required_with:dateFirst|date|after_or_equal:dateFirst'
             ]);
 
             $collectionA = collect();

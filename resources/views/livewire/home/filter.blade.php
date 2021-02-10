@@ -61,7 +61,7 @@
                 <div class="form-row col-sm-3">
                     <div class="col-6">
                         <label>Choose Between Ages:</label>
-                        <select class="form-control @error('ageFirst') mb-4 is-invalid state-invalid @enderror" wire:model.defer="ageFirst">
+                        <select class="form-control @error('ageFirst') is-invalid state-invalid @enderror" wire:model.defer="ageFirst">
                             <option value="">--Select--</option>
                             <option value="17">17</option>
                             <option value="18">18</option>
@@ -119,12 +119,12 @@
                             <option value="70">70</option>
                         </select>
                         @error('ageFirst')
-                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        <div class="bg-danger-transparent-2 text-danger mb-4" role="alert">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-6">
                         <label><span style="visibility:hidden;">Choose Between Ages:</span></label>
-                        <select class="form-control @error('ageSecond') mb-4 is-invalid state-invalid @enderror" wire:model.defer="ageSecond">
+                        <select class="form-control @error('ageSecond') is-invalid state-invalid @enderror" wire:model.defer="ageSecond">
                             <option value="">--Select--</option>
                             <option value="17">17</option>
                             <option value="18">18</option>
@@ -182,23 +182,23 @@
                             <option value="70">70</option>
                         </select>
                         @error('ageSecond')
-                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        <div class="bg-danger-transparent-2 text-danger mb-4" role="alert">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
                 <div class="form-row col-sm-3">
                     <div class="col-6">
                         <label>Choose Between Date:</label>
-                        <input class="form-control @error('dateFirst') mb-4 is-invalid state-invalid @enderror" type="date" value="2020-01-01" wire:model.defer="dateFirst">
+                        <input class="form-control @error('dateFirst') is-invalid state-invalid @enderror" type="date" value="2020-01-01" wire:model.defer="dateFirst">
                         @error('dateFirst')
-                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        <div class="bg-danger-transparent-2 text-danger mb-4" role="alert">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-6">
                         <label><span style="visibility:hidden;">Choose Between Date:</span></label>
-                        <input class="form-control @error('dateSecond') mb-4 is-invalid state-invalid @enderror" type="date" value="2020-12-31" wire:model.defer="dateSecond">
+                        <input class="form-control @error('dateSecond') is-invalid state-invalid @enderror" type="date" value="2020-12-31" wire:model.defer="dateSecond">
                         @error('dateSecond')
-                        <div class="bg-danger-transparent-2 text-danger px-4 py-2 br-3 mb-4" role="alert">{{ $message }}</div>
+                        <div class="bg-danger-transparent-2 text-danger mb-4" role="alert">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
