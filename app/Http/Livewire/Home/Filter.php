@@ -24,8 +24,6 @@ class Filter extends Component
 
     public function filter()
     {
-        // $this->reset(['filterProduct']);
-
         if ($this->product || $this->country || $this->ageFirst || $this->ageSecond || $this->dateFirst || $this->dateSecond) {
             $this->validate([
                 'ageFirst' => 'nullable|required_with:ageSecond|numeric|lte:ageSecond',
@@ -34,21 +32,36 @@ class Filter extends Component
                 'dateSecond' => 'nullable|required_with:dateFirst|date|after_or_equal:dateFirst'
             ]);
 
-            $collectionA = collect();
 
-            Order::whereHas('customer', function (Builder $query) {
-                $query->whereBetween('age', [$this->ageFirst, $this->ageSecond])->orWhere('country', $this->country);
-            })->orWhere('product_id', $this->product)->orWhereBetween('created_at', [$this->dateFirst, $this->dateSecond])->select('created_at')->chunk(10000, function ($orders) use ($collectionA) {
-                foreach ($orders as $order) {
-                    $collectionA->push($order);
-                }
-            });
+            $collection = Order::select(['customer_id','created_at'])
+                                ->where('product_id', $this->product)
+                                ->orWhereBetween('created_at', [$this->dateFirst, $this->dateSecond])
+                                ->orWhereHas('customer', function (Builder $query) {
+                                    $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->orWhere('country', $this->country);
+                                })
+                                ->get();
 
-            $this->filterProduct = $collectionA->groupBy(function ($item) {
+            $this->filterProduct = $collection->groupBy(function ($item) {
                                     return Carbon::parse($item->created_at)->format('n');
                                 })->sortKeys()->map(function ($item) {
                                     return $item->count();
                                 })->all();
+
+            // $collectionA = collect();
+
+            // Order::whereHas('customer', function (Builder $query) {
+            //     $query->whereBetween('age', [$this->ageFirst, $this->ageSecond])->orWhere('country', $this->country);
+            // })->orWhere('product_id', $this->product)->orWhereBetween('created_at', [$this->dateFirst, $this->dateSecond])->select('created_at')->chunk(10000, function ($orders) use ($collectionA) {
+            //     foreach ($orders as $order) {
+            //         $collectionA->push($order);
+            //     }
+            // });
+
+            // $this->filterProduct = $collectionA->groupBy(function ($item) {
+            //                         return Carbon::parse($item->created_at)->format('n');
+            //                     })->sortKeys()->map(function ($item) {
+            //                         return $item->count();
+            //                     })->all();
 
             $this->emit('filterReport', $this->filterProduct);
         } else {
