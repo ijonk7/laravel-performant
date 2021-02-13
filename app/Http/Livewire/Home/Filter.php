@@ -58,11 +58,27 @@ class Filter extends Component
                                 )
                                 ->get();
 
+            // $this->filterProduct = $collection->groupBy(function ($item) {
+            //                         return Carbon::parse($item->created_at)->format('n');
+            //                     })->sortKeys()->map(function ($item) {
+            //                         return $item->count();
+            //                     })->all();
+
             $this->filterProduct = $collection->groupBy(function ($item) {
                                     return Carbon::parse($item->created_at)->format('n');
-                                })->sortKeys()->map(function ($item) {
-                                    return $item->count();
-                                })->all();
+                                    })
+                                    ->map(function ($item) {
+                                        return $item->count();
+                                    })
+                                    ->union([1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0])
+                                    ->sortKeys()
+                                    ->all();
+
+            // $collection = collect([1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0]);
+            // $merged = $collection->merge($this->filterProduct);
+
+            // dd($this->filterProduct);
+            // dd($merged);
 
 
 
