@@ -32,13 +32,30 @@ class Filter extends Component
                 'dateSecond' => 'nullable|required_with:dateFirst|date|after_or_equal:dateFirst'
             ]);
 
-
             $collection = Order::select(['customer_id','created_at'])
-                                ->where('product_id', $this->product)
-                                ->orWhereBetween('created_at', [$this->dateFirst, $this->dateSecond])
-                                ->orWhereHas('customer', function (Builder $query) {
-                                    $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->orWhere('country', $this->country);
+                                ->when($this->product, function ($query) {
+                                    return $query->where('product_id', $this->product);
                                 })
+                                ->when($this->dateFirst, function ($query) {
+                                    return $query->whereBetween('created_at', [$this->dateFirst.' 00:00:00', $this->dateSecond.' 23:59:59']);
+                                })
+                                ->when($this->ageFirst AND $this->country, function ($query) {
+                                        return $query->WhereHas('customer', function (Builder $query) {
+                                            $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
+                                        });
+                                    }, function ($query) {
+                                        $query->when($this->ageFirst, function ($query) {
+                                            $query->WhereHas('customer', function (Builder $query) {
+                                                return $query->select(['id','age'])->whereBetween('age', [$this->ageFirst, $this->ageSecond]);
+                                            });
+                                        });
+                                        $query->when($this->country, function ($query) {
+                                            $query->WhereHas('customer', function (Builder $query) {
+                                                return $query->select(['id','country'])->where('country', $this->country);
+                                            });
+                                        });
+                                    }
+                                )
                                 ->get();
 
             $this->filterProduct = $collection->groupBy(function ($item) {
@@ -46,6 +63,8 @@ class Filter extends Component
                                 })->sortKeys()->map(function ($item) {
                                     return $item->count();
                                 })->all();
+
+
 
             // $collectionA = collect();
 

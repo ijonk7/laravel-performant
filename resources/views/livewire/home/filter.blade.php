@@ -10,26 +10,26 @@
                     <label>Select Product (select one):</label>
                     <select class="form-control" wire:model.defer="product">
                         <option value="">--Select--</option>
-                        <option value="1">Air Conditioner</option>
-                        <option value="2">Biscuits</option>
-                        <option value="3">CCTV</option>
-                        <option value="4">Clothes</option>
-                        <option value="5">Comic</option>
-                        <option value="6">Cookbook</option>
-                        <option value="7">DVD Player</option>
-                        <option value="8">Earphone</option>
+                        <option value="7">Air Conditioner</option>
+                        <option value="1">Biscuits</option>
+                        <option value="19">CCTV</option>
+                        <option value="2">Clothes</option>
+                        <option value="3">Comic</option>
+                        <option value="4">Cookbook</option>
+                        <option value="8">DVD Player</option>
+                        <option value="16">Earphone</option>
                         <option value="9">Handphone</option>
-                        <option value="10">Hat</option>
-                        <option value="11">Knife</option>
-                        <option value="12">Laptop</option>
-                        <option value="13">Microwave</option>
-                        <option value="14">Pants</option>
-                        <option value="15">Pen</option>
-                        <option value="16">Printer</option>
-                        <option value="17">Refrigerator</option>
-                        <option value="18">Shoes</option>
-                        <option value="19">TV</option>
-                        <option value="20">Watches</option>
+                        <option value="6">Hat</option>
+                        <option value="17">Knife</option>
+                        <option value="14">Laptop</option>
+                        <option value="10">Microwave</option>
+                        <option value="13">Pants</option>
+                        <option value="11">Pen</option>
+                        <option value="5">Printer</option>
+                        <option value="15">Refrigerator</option>
+                        <option value="20">Shoes</option>
+                        <option value="12">TV</option>
+                        <option value="18">Watches</option>
                     </select>
                 </div>
                 <div class="col-sm-2 form-group">
