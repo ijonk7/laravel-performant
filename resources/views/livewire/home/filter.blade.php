@@ -1,7 +1,10 @@
 
     <div wire:ignore.self class="container-fluid">
+        <div class="card-header d-flex">
+            <mark class="ml-auto bg-warning">Info: Retrieving data from {{ $dataFrom }}.</mark>
+        </div>
         <div class="d-flex justify-content-center jumbotron">
-            <h1><a href="">2020 Sales Report</a></h1>
+            <h1><a href="">Sales Report 2020</a></h1>
         </div>
 
         <form wire:submit.prevent="filter">

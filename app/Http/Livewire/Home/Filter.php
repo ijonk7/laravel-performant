@@ -3,8 +3,10 @@
 namespace App\Http\Livewire\Home;
 
 use App\Models\Order;
+use App\Models\VwAllReport;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Redis;
 use Livewire\Component;
 
 class Filter extends Component
@@ -16,6 +18,7 @@ class Filter extends Component
     public $dateFirst;
     public $dateSecond;
     public $filterProduct;
+    public $dataFrom = 'Redis';
 
     public function render()
     {
@@ -32,75 +35,75 @@ class Filter extends Component
                 'dateSecond' => 'nullable|required_with:dateFirst|date|after_or_equal:dateFirst'
             ]);
 
-            $collection = Order::select(['customer_id','created_at'])
-                                ->when($this->product, function ($query) {
-                                    return $query->where('product_id', $this->product);
-                                })
-                                ->when($this->dateFirst, function ($query) {
-                                    return $query->whereBetween('created_at', [$this->dateFirst.' 00:00:00', $this->dateSecond.' 23:59:59']);
-                                })
-                                ->when($this->ageFirst AND $this->country, function ($query) {
-                                        return $query->WhereHas('customer', function (Builder $query) {
-                                            $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
-                                        });
-                                    }, function ($query) {
-                                        $query->when($this->ageFirst, function ($query) {
-                                            $query->WhereHas('customer', function (Builder $query) {
-                                                return $query->select(['id','age'])->whereBetween('age', [$this->ageFirst, $this->ageSecond]);
-                                            });
-                                        });
-                                        $query->when($this->country, function ($query) {
-                                            $query->WhereHas('customer', function (Builder $query) {
-                                                return $query->select(['id','country'])->where('country', $this->country);
-                                            });
-                                        });
-                                    }
-                                )
-                                ->get();
+            $checkRedisExist = Redis::exists('filter_product' . $this->product . '_country' . $this->country . '_age' . $this->ageFirst . $this->ageSecond . '_date' . $this->dateFirst . $this->dateSecond);
 
-            // $this->filterProduct = $collection->groupBy(function ($item) {
-            //                         return Carbon::parse($item->created_at)->format('n');
-            //                     })->sortKeys()->map(function ($item) {
-            //                         return $item->count();
-            //                     })->all();
-
-            $this->filterProduct = $collection->groupBy(function ($item) {
-                                    return Carbon::parse($item->created_at)->format('n');
+            if ($checkRedisExist) {
+                $filterProductChart = Redis::get('filter_product' . $this->product . '_country' . $this->country . '_age' . $this->ageFirst . $this->ageSecond . '_date' . $this->dateFirst . $this->dateSecond);
+                $this->filterProduct = json_decode($filterProductChart, true);
+                $this->dataFrom = 'Redis';
+            } else {
+                $collection = Order::select(['customer_id','created_at'])
+                                    ->when($this->product, function ($query) {
+                                        return $query->where('product_id', $this->product);
                                     })
-                                    ->map(function ($item) {
-                                        return $item->count();
+                                    ->when($this->dateFirst, function ($query) {
+                                        return $query->whereBetween('created_at', [$this->dateFirst.' 00:00:00', $this->dateSecond.' 23:59:59']);
                                     })
-                                    ->union([1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0])
-                                    ->sortKeys()
-                                    ->all();
+                                    ->when($this->ageFirst AND $this->country, function ($query) {
+                                            return $query->WhereHas('customer', function (Builder $query) {
+                                                $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
+                                            });
+                                        }, function ($query) {
+                                            $query->when($this->ageFirst, function ($query) {
+                                                $query->WhereHas('customer', function (Builder $query) {
+                                                    return $query->select(['id','age'])->whereBetween('age', [$this->ageFirst, $this->ageSecond]);
+                                                });
+                                            });
+                                            $query->when($this->country, function ($query) {
+                                                $query->WhereHas('customer', function (Builder $query) {
+                                                    return $query->select(['id','country'])->where('country', $this->country);
+                                                });
+                                            });
+                                        }
+                                    )
+                                    ->get();
 
-            // $collection = collect([1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0]);
-            // $merged = $collection->merge($this->filterProduct);
+                $this->filterProduct = $collection->groupBy(function ($item) {
+                                        return Carbon::parse($item->created_at)->format('n');
+                                        })
+                                        ->map(function ($item) {
+                                            return $item->count();
+                                        })
+                                        ->union([1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0])
+                                        ->sortKeys()
+                                        ->all();
 
-            // dd($this->filterProduct);
-            // dd($merged);
+                $this->dataFrom = 'Database';
 
-
-
-            // $collectionA = collect();
-
-            // Order::whereHas('customer', function (Builder $query) {
-            //     $query->whereBetween('age', [$this->ageFirst, $this->ageSecond])->orWhere('country', $this->country);
-            // })->orWhere('product_id', $this->product)->orWhereBetween('created_at', [$this->dateFirst, $this->dateSecond])->select('created_at')->chunk(10000, function ($orders) use ($collectionA) {
-            //     foreach ($orders as $order) {
-            //         $collectionA->push($order);
-            //     }
-            // });
-
-            // $this->filterProduct = $collectionA->groupBy(function ($item) {
-            //                         return Carbon::parse($item->created_at)->format('n');
-            //                     })->sortKeys()->map(function ($item) {
-            //                         return $item->count();
-            //                     })->all();
+                Redis::mset('filter_product' . $this->product . '_country' . $this->country . '_age' . $this->ageFirst . $this->ageSecond . '_date' . $this->dateFirst . $this->dateSecond, json_encode($this->filterProduct));
+            }
 
             $this->emit('filterReport', $this->filterProduct);
         } else {
-            $this->emit('filterAllReport');
+            $checkRedisExist = Redis::exists('index_chart');
+
+            if ($checkRedisExist) {
+                $index_chart = Redis::get('index_chart');
+
+                $this->filterProduct = json_decode($index_chart);
+
+                $this->dataFrom = 'Redis';
+            } else {
+                $this->filterProduct = VwAllReport::all()->map(function ($item, $key) {
+                    return $item->orders;
+                })->all();
+
+                $this->dataFrom = 'Database';
+
+                Redis::set('index_chart', json_encode($this->filterProduct));
+            }
+
+            $this->emit('filterReport', $this->filterProduct);
         }
     }
 }
