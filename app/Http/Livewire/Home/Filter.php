@@ -80,7 +80,7 @@ class Filter extends Component
 
                 $this->dataFrom = 'Database';
 
-                Redis::mset('filter_product' . $this->product . '_country' . $this->country . '_age' . $this->ageFirst . $this->ageSecond . '_date' . $this->dateFirst . $this->dateSecond, json_encode($this->filterProduct));
+                Redis::set('filter_product' . $this->product . '_country' . $this->country . '_age' . $this->ageFirst . $this->ageSecond . '_date' . $this->dateFirst . $this->dateSecond, json_encode($this->filterProduct));
             }
 
             $this->emit('filterReport', $this->filterProduct);
