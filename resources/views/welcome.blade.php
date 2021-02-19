@@ -20,7 +20,7 @@
     <div class="container pt-3">
         <canvas id="myChart"></canvas>
         <div class="d-flex justify-content-end pt-3">
-            <p><strong>* Total rows in the orders table: 97460 rows.</strong></p>
+            <p><strong>* Total rows in the orders table: 5072159 rows.</strong></p>
         </div>
     </div>
 
