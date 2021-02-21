@@ -42,6 +42,8 @@ class Filter extends Component
                 $this->filterProduct = json_decode($filterProductChart, true);
                 $this->dataFrom = 'Redis';
             } else {
+                ini_set('memory_limit', '-1');
+
                 $collection = Order::select(['customer_id','created_at'])
                                     ->when($this->product, function ($query) {
                                         return $query->where('product_id', $this->product);
@@ -50,9 +52,14 @@ class Filter extends Component
                                         return $query->whereBetween('created_at', [$this->dateFirst.' 00:00:00', $this->dateSecond.' 23:59:59']);
                                     })
                                     ->when($this->ageFirst AND $this->country, function ($query) {
-                                            return $query->WhereHas('customer', function (Builder $query) {
-                                                $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
+                                            return $query->chunk(100000, function ($query) {
+                                                $query->WhereHas('customer', function (Builder $query) {
+                                                    $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
+                                                });
                                             });
+                                            // return $query->WhereHas('customer', function (Builder $query) {
+                                            //     $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
+                                            // });
                                         }, function ($query) {
                                             $query->when($this->ageFirst, function ($query) {
                                                 $query->WhereHas('customer', function (Builder $query) {
@@ -67,6 +74,8 @@ class Filter extends Component
                                         }
                                     )
                                     ->get();
+
+                                    // dd($collection);
 
                 $this->filterProduct = $collection->groupBy(function ($item) {
                                         return Carbon::parse($item->created_at)->format('n');
