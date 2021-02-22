@@ -21,7 +21,7 @@ Auth::routes([
     'register' => true,
     'reset'    => false,   // for resetting passwords
     'confirm'  => false,  // for additional password confirmations
-    'verify'   => false,  // for email verification
+    'verify'   => true,  // for email verification
 ]);
 
 Route::get('/', [HomeController::class, 'index']);
