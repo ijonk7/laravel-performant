@@ -52,14 +52,9 @@ class Filter extends Component
                                         return $query->whereBetween('created_at', [$this->dateFirst.' 00:00:00', $this->dateSecond.' 23:59:59']);
                                     })
                                     ->when($this->ageFirst AND $this->country, function ($query) {
-                                            return $query->chunk(100000, function ($query) {
-                                                $query->WhereHas('customer', function (Builder $query) {
-                                                    $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
-                                                });
+                                            return $query->WhereHas('customer', function (Builder $query) {
+                                                $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
                                             });
-                                            // return $query->WhereHas('customer', function (Builder $query) {
-                                            //     $query->select(['id','age','country'])->whereBetween('age', [$this->ageFirst, $this->ageSecond])->where('country', $this->country);
-                                            // });
                                         }, function ($query) {
                                             $query->when($this->ageFirst, function ($query) {
                                                 $query->WhereHas('customer', function (Builder $query) {
