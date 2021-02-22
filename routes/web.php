@@ -15,7 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes([
+    'login'    => true,
+    'logout'   => true,
+    'register' => true,
+    'reset'    => false,   // for resetting passwords
+    'confirm'  => false,  // for additional password confirmations
+    'verify'   => false,  // for email verification
+]);
+
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/login', [HomeController::class, 'login']);
 
 Route::get('/publish', function () {
     // ...
@@ -24,3 +34,11 @@ Route::get('/publish', function () {
         'name' => 'Adam Wathan'
     ]));
 });
+
+Route::get('/set-1', function () {
+    Redis::set('sekolah', 'lulus dong');
+});
+
+Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
