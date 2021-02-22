@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailNotification;
 
-class VerifyEmail extends VerifyEmailNotification implements ShouldQueue
+class VerifyEmail extends VerifyEmail implements ShouldQueue
 {
     use Queueable;
 
@@ -19,7 +19,7 @@ class VerifyEmail extends VerifyEmailNotification implements ShouldQueue
      */
     public function __construct()
     {
-        $this->queue = 'email';
+        // $this->queue = 'email';
     }
 
     /**
