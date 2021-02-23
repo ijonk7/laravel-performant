@@ -37,7 +37,7 @@ class VerifyEmail extends VerifyEmailNotification implements ShouldQueue
 
     public function tags()
     {
-        return ['render', 'video:1'];
+        return ['email-pendaftaran'];
     }
 
     /**
