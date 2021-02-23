@@ -12,7 +12,7 @@ class VerifyEmail extends VerifyEmailNotification implements ShouldQueue
 {
     use Queueable;
 
-    public $connection = 'email-pendaftaran';
+    // public $connection = 'email-pendaftaran';
 
     /**
      * Create a new notification instance.
@@ -21,7 +21,7 @@ class VerifyEmail extends VerifyEmailNotification implements ShouldQueue
      */
     public function __construct()
     {
-        //
+        $this->queue = 'email-pendaftaran';
     }
 
     /**
