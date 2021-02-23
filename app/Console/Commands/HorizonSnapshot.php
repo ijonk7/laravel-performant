@@ -18,7 +18,7 @@ class HorizonSnapshot extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Configure snapshot for metrics';
 
     /**
      * Create a new command instance.

@@ -35,6 +35,11 @@ class VerifyEmail extends VerifyEmailNotification implements ShouldQueue
         return ['mail'];
     }
 
+    public function tags()
+    {
+        return ['render', 'video:1'];
+    }
+
     /**
      * Get the mail representation of the notification.
      *
