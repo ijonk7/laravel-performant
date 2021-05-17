@@ -11,4 +11,3 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/database/migrations/2021_02_08_223956_create_vw_report_all_table.php
